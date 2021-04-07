@@ -3,44 +3,66 @@
 import pymysql
 from vendor.hummingbird import hb_config
 
-db = pymysql.connect(host=hb_config.get('mysql', 'host'),
-                     port=3306,
-                     user=hb_config.get('mysql', 'user'),
-                     passwd=hb_config.get('mysql', 'password'),
-                     db=hb_config.get('mysql', 'database'),
-                     charset='utf8')
 
-cursor = db.cursor()
+connection = pymysql.connect(host=hb_config.get('mysql', 'host'),
+                             port=hb_config.get('mysql', 'port'),
+                             user=hb_config.get('mysql', 'user'),
+                             passwd=hb_config.get('mysql', 'password'),
+                             db=hb_config.get('mysql', 'database'),
+                             charset='utf8mb4')
 
 
 def select(query, args=[]):
-    cursor.execute(query, args)
-    data = cursor.fetchall()
-    return data
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query, args)
+            data = cursor.fetchall()
+            return data
+        except pymysql.Error as e:
+            print(e)
 
 
 def update(query, args=[]):
-    cursor.execute(query, args)
-    db.commit()
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query, args)
+            connection.commit()
+            return cursor.rowcount
+        except pymysql.Error as e:
+            print(e)
 
 
 def insert(query, args=[]):
-    if len(args) > 1:
-        cursor.executemany(query, args)
-    else:
-        cursor.execute(query, args)
-    db.commit()
+    with connection.cursor() as cursor:
+        try:
+            if len(args) > 1:
+                cursor.executemany(query, args)
+            else:
+                cursor.execute(query, args)
+            connection.commit()
+            return cursor.lastrowid
+        except pymysql.Error as e:
+            print(e)
 
 
 def delete(query, args=[]):
-    cursor.execute(query, args)
-    db.commit()
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query, args)
+            connection.commit()
+            return cursor.rowcount
+        except pymysql.Error as e:
+            print(e)
 
 
 def execute(query, args=[]):
-    cursor.execute(query, args)
+    with connection.cursor() as cursor:
+        try:
+            cursor.execute(query, args)
+        except pymysql.Error as e:
+            print(e)
 
 
 def close():
-    db.close()
+    connection.close()
 

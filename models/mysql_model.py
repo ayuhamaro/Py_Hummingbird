@@ -13,20 +13,24 @@ def get_data():
 
 def update_data():
     sql = 'UPDATE TAG_SWAMP SET word = %s WHERE id = %s;'
-    args = ['Maro', 1]
-    mysql.update(sql, args)
+    args = ['Maro', 2]
+    data = mysql.update(sql, args)
     mysql.close()
+    return data
 
 
 def insert_data():
     sql = 'INSERT INTO TAG_SWAMP (word) VALUES (%s)'
-    args = [('Maro1'), ('Maro2'), ('Maro3')]
-    mysql.insert(sql, args)
+    args = [('Maro11'), ('Maro12'), ('Maro13')]
+    data = mysql.insert(sql, args)
     mysql.close()
+    return data
 
 
 def delete_data():
     sql = 'DELETE FROM TAG_SWAMP WHERE id = %s'
-    args = [1]
-    mysql.delete(sql, args)
+    args = [5]
+    data = mysql.delete(sql, args)
     mysql.close()
+    return data
+
