@@ -13,16 +13,34 @@ db = pymysql.connect(host=hb_config.get('mysql', 'host'),
 cursor = db.cursor()
 
 
-def select(sql):
-    cursor.execute(sql)
+def select(query, args=[]):
+    cursor.execute(query, args)
     data = cursor.fetchall()
     return data
 
 
-def update(sql):
-    cursor.execute(sql)
+def update(query, args=[]):
+    cursor.execute(query, args)
     db.commit()
+
+
+def insert(query, args=[]):
+    if len(args) > 1:
+        cursor.executemany(query, args)
+    else:
+        cursor.execute(query, args)
+    db.commit()
+
+
+def delete(query, args=[]):
+    cursor.execute(query, args)
+    db.commit()
+
+
+def execute(query, args=[]):
+    cursor.execute(query, args)
 
 
 def close():
     db.close()
+
