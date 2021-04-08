@@ -13,56 +13,59 @@ connection = pymysql.connect(host=hb_config.get('mysql', 'host'),
 
 
 def select(query, args=[]):
-    with connection.cursor() as cursor:
-        try:
+    try:
+        with connection.cursor() as cursor:
             cursor.execute(query, args)
             data = cursor.fetchall()
             return data
-        except pymysql.Error as e:
-            print(e)
+    except pymysql.Error as e:
+        print(e)
 
 
 def update(query, args=[]):
-    with connection.cursor() as cursor:
-        try:
+    try:
+        with connection.cursor() as cursor:
             cursor.execute(query, args)
             connection.commit()
             return cursor.rowcount
-        except pymysql.Error as e:
-            print(e)
+    except pymysql.Error as e:
+        print(e)
 
 
 def insert(query, args=[]):
-    with connection.cursor() as cursor:
-        try:
+    try:
+        with connection.cursor() as cursor:
             if len(args) > 1:
                 cursor.executemany(query, args)
             else:
                 cursor.execute(query, args)
             connection.commit()
             return cursor.lastrowid
-        except pymysql.Error as e:
-            print(e)
+    except pymysql.Error as e:
+        print(e)
 
 
 def delete(query, args=[]):
-    with connection.cursor() as cursor:
-        try:
+    try:
+        with connection.cursor() as cursor:
             cursor.execute(query, args)
             connection.commit()
             return cursor.rowcount
-        except pymysql.Error as e:
-            print(e)
+    except pymysql.Error as e:
+        print(e)
 
 
 def execute(query, args=[]):
-    with connection.cursor() as cursor:
-        try:
+    try:
+        with connection.cursor() as cursor:
             cursor.execute(query, args)
-        except pymysql.Error as e:
-            print(e)
+    except pymysql.Error as e:
+        print(e)
 
 
 def close():
-    connection.close()
+    try:
+        connection.close()
+    except pymysql.Error as e:
+        print(e)
 

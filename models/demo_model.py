@@ -4,32 +4,32 @@ import vendor.hummingbird.hb_mysql as mysql
 
 
 def get_data():
-    sql = 'SELECT * FROM TAG_POOL WHERE id = %s;'
-    args = [7010]
+    sql = 'SELECT * FROM FOO WHERE id = %s;'
+    args = [1]
     data = mysql.select(sql, args)
     mysql.close()
     return data
 
 
 def update_data():
-    sql = 'UPDATE TAG_SWAMP SET word = %s WHERE id = %s;'
-    args = ['Maro', 2]
+    sql = 'UPDATE FOO SET foo = %s WHERE id = %s;'
+    args = ['Foo', 2]
     data = mysql.update(sql, args)
     mysql.close()
     return data
 
 
 def insert_data():
-    sql = 'INSERT INTO TAG_SWAMP (word) VALUES (%s)'
-    args = [('Maro11'), ('Maro12'), ('Maro13')]
+    sql = 'INSERT INTO FOO (foo) VALUES (%s)'
+    args = [('Foo1'), ('Foo2'), ('Foo3')]
     data = mysql.insert(sql, args)
     mysql.close()
     return data
 
 
 def delete_data():
-    sql = 'DELETE FROM TAG_SWAMP WHERE id = %s'
-    args = [5]
+    sql = 'DELETE FROM FOO WHERE id = %s'
+    args = [1]
     data = mysql.delete(sql, args)
     mysql.close()
     return data

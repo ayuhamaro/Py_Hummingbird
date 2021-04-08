@@ -2,14 +2,14 @@
 
 mysql = {
 
-    'host': 'db.hukaka.com',
+    'host': 'your_host',
 
     'port': 3306,
 
-    'user': 'root',
+    'user': 'your_user',
 
-    'password': '26118E3bf4088C3b9a4aaec6b7903748!@#',
+    'password': 'your_password',
 
-    'database': 'SUP_LEN_MGT',
+    'database': 'your_database',
 
 }
