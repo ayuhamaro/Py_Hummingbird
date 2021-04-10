@@ -10,3 +10,5 @@ def get(index):
         return sys.argv[index]
 
 
+def count():
+    return len(sys.argv)
