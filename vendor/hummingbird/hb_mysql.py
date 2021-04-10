@@ -18,6 +18,7 @@ def select(query, args=[]):
             cursor.execute(query, args)
             data = cursor.fetchall()
             return data
+
     except pymysql.Error as e:
         print(e)
 
@@ -28,19 +29,43 @@ def update(query, args=[]):
             cursor.execute(query, args)
             connection.commit()
             return cursor.rowcount
+
     except pymysql.Error as e:
         print(e)
 
 
 def insert(query, args=[]):
+    batch_row = 100
+
     try:
         with connection.cursor() as cursor:
-            if len(args) > 1:
-                cursor.executemany(query, args)
-            else:
+            if isinstance(args, list):
+                if len(args) > batch_row:
+                    data_list = []
+                    for row in args:
+                        data_list.append(row)
+                        if len(data_list) == batch_row:
+                            cursor.executemany(query, data_list)
+                            connection.commit()
+                            data_list = []
+
+                    cursor.executemany(query, data_list)
+                    connection.commit()
+
+                elif len(args) > 1:
+                    cursor.executemany(query, args)
+                    connection.commit()
+
+                else:
+                    cursor.execute(query, args[0])
+                    connection.commit()
+
+            elif isinstance(args, tuple):
                 cursor.execute(query, args)
-            connection.commit()
+                connection.commit()
+
             return cursor.lastrowid
+
     except pymysql.Error as e:
         print(e)
 
@@ -51,6 +76,7 @@ def delete(query, args=[]):
             cursor.execute(query, args)
             connection.commit()
             return cursor.rowcount
+
     except pymysql.Error as e:
         print(e)
 
@@ -59,6 +85,7 @@ def execute(query, args=[]):
     try:
         with connection.cursor() as cursor:
             cursor.execute(query, args)
+
     except pymysql.Error as e:
         print(e)
 
@@ -66,6 +93,6 @@ def execute(query, args=[]):
 def close():
     try:
         connection.close()
+
     except pymysql.Error as e:
         print(e)
-
