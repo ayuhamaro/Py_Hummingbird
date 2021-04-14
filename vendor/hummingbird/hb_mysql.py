@@ -69,7 +69,7 @@ def insert(query, args=[]):
                     connection.commit()
 
             elif isinstance(args, tuple):
-                if len(tuple) == 0:
+                if len(args) == 0:
                     cursor.execute(query)
                 else:
                     cursor.execute(query, args)
