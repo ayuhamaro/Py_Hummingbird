@@ -9,13 +9,17 @@ connection = pymysql.connect(host=hb_config.get('mysql', 'host'),
                              user=hb_config.get('mysql', 'user'),
                              passwd=hb_config.get('mysql', 'password'),
                              db=hb_config.get('mysql', 'database'),
-                             charset='utf8mb4')
+                             charset='utf8mb4',)
 
 
 def select(query, args=[]):
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, args)
+            if len(args) == 0:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, args)
+
             data = cursor.fetchall()
             return data
 
@@ -26,7 +30,11 @@ def select(query, args=[]):
 def update(query, args=[]):
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, args)
+            if len(args) == 0:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, args)
+
             connection.commit()
             return cursor.rowcount
 
@@ -52,16 +60,19 @@ def insert(query, args=[]):
                     cursor.executemany(query, data_list)
                     connection.commit()
 
-                elif len(args) > 1:
+                elif len(args) > 0:
                     cursor.executemany(query, args)
                     connection.commit()
 
                 else:
-                    cursor.execute(query, args[0])
+                    cursor.execute(query)
                     connection.commit()
 
             elif isinstance(args, tuple):
-                cursor.execute(query, args)
+                if len(tuple) == 0:
+                    cursor.execute(query)
+                else:
+                    cursor.execute(query, args)
                 connection.commit()
 
             return cursor.lastrowid
@@ -73,7 +84,11 @@ def insert(query, args=[]):
 def delete(query, args=[]):
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, args)
+            if len(args) == 0:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, args)
+
             connection.commit()
             return cursor.rowcount
 
@@ -84,7 +99,10 @@ def delete(query, args=[]):
 def execute(query, args=[]):
     try:
         with connection.cursor() as cursor:
-            cursor.execute(query, args)
+            if len(args) == 0:
+                cursor.execute(query)
+            else:
+                cursor.execute(query, args)
 
     except pymysql.Error as e:
         print(e)
